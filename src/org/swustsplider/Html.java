@@ -41,11 +41,14 @@ public class Html {
 			while(i != 0){
 				i--;
 			}
+			/*
+			 * 使用时候需要自己输入自己的cookie。
+			 */
 			Map<String,String> cookies = null;
 			cookies = new HashMap<String,String>();
 			cookies.put("UM_distinctid", "15d064da968c5-0fd8cfa5cb8f47-36624308-144000-15d064da969142");
 			cookies.put("iPlanetDirectoryPro", "AQIC5wM2LY4SfcxYUSHvyCEgXVHOFBAivuIrwUke7s3CCsU%3D%40AAJTSQACMDE%3D%23");
-			cookies.put("SSO", "TGC%2D301160bcda674c8ef17dc5435ac5fe71996a7b0ed752bce6a3f54a981028a7b33e8e7a35081215a95efbb619c0f005cd99ab0f671d64edba85543861cec49f8e349c37f5591eb68f234e4b8431944afb913e2f8e39a1b88a88afc300745c7a74d105352bfcf90ffb900d428edaee77f6425e2d4b8b3f9f8ae3985168ecce3d5459309c65948cfb89d0173e1fca702a1aef5ca06ec4801437053cdb91ef3b3b8f62b55b2dbcfe4bed02cb90578db8decffa59985a7b5b1a7b298fe450f97b6874555ba33bdf566f1772c5b62a37528bbca5dfb6ad56b9eba6b5f82885d118ea0195b0ca8e72c475150683394f3a80c8d2702cfed44affe255");
+			cookies.put("SSO", "TGC%2D75fbd0e7f185a01d033a0c3f9fea4a20eab8cb3fbb229b706e78e025dc49bc3b149b16da56e8bcf9f60d2d92c767ad016651b3a2a2b64bd234f0c1c1ce6b1e9940594164e59b1804ed075ab4dc2a399556fe06a01fe00758298e5148bdb06516f90dc72eb52dbc9904da2ac1ca473a0a736d4fdceacd4d07a92d1863c97344df7fe908851ee20fd15b0cd0e93e3a03cf0b5b6075c22a1a8b6474a7c6b7e54ec23b9b80a399eebb5d23da8f71b494423fad158de4935e7ecd465027ab006657adf02098686d6c2a606ff1133390d7e610fcd4ca83ef0f5d176fb4617ca65dd2da7308c2877004250fb30af5bab599ee391438895b0b0a9d2c");
 			doc = (Document) Jsoup.connect(url).userAgent("Mozilla").cookies(cookies).timeout(30000).post();
 		}catch(IOException e){
 			e.printStackTrace();
@@ -129,7 +132,9 @@ public class Html {
 		Document doc2 = this.getHtmlTextByUrl(url);
 		//从本地获取网页，如果没有则从网络上获取
 		//Document doc2 = this.getHtmlTextByPath(name, url);
+		Db_swustscore dbAction = new Db_swustscore();
 		if(doc2 != null){
+			
 			if(type.equals("img")){
 				try {
 					this.image(doc2);
@@ -163,6 +168,9 @@ public class Html {
 							db.setClassChar(ch[3]);
 							db.setClassScore(ch[4]);
 							db.setClassGDP(ch[5]);
+							if(dbAction.query(ch[0])){
+								continue;
+							}
 							list.add(db);
 							output.write(str);
 						}
@@ -195,8 +203,7 @@ public class Html {
 			}
 		}
 		output.close();
-		Db_swustscore db = new Db_swustscore();
-		db.insert(list);
+		dbAction.insert(list);
 		return result ;
 	}
 	

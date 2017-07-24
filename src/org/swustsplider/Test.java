@@ -10,7 +10,10 @@ public class Test {
 		Html html = new Html();
 		String url;
 		Scanner in = new Scanner(System.in);
+		//手动在控制台输入西南科技大学教务处
 		url = in.nextLine();
+		//url = "https://matrix.dean.swust.edu.cn/acadmicManager/index.cfm?event=studentProfile:courseMark";
+		//每次需要手动输入 上方url 或者把注释取消，将Scanner类注释。
 		Connection connection = Db_swustscore.getconnection();
 		html.getProbince("indexde", url, "cellbord");
 		try {
